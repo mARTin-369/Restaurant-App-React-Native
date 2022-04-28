@@ -1,0 +1,18 @@
+{
+    "expo": {
+        "name": "OneBite",
+        "icon": "./assets/food.png",
+        "splash": {
+            "image": "./assets/splash.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#ffffff"
+          },
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "slug": "onebite",
+        "android": {
+            "package": "com.martin.onebite",
+            "versionCode": 1
+        }
+    }
+}
