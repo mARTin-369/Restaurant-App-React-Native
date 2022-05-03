@@ -1,0 +1,11 @@
+{
+    "android": {
+        "package": "com.martin.onebite",
+        "versionCode": 1,
+        "config": {
+            "googleMaps": {
+                "apiKey": "AIzaSyCZXzJ9mTjx0rPEH3h4OaHnpN324ZYyBeM"
+            }
+        }
+    }
+}

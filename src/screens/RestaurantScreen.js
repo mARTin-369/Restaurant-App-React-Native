@@ -7,9 +7,11 @@ import {
   ActivityIndicator,
   Dimensions,
 } from "react-native";
-// import MapView from "react-native-maps";
+
 import { useEffect } from "react";
 import useRestaurant from "../hooks/useRestaurant";
+import Map from "../components/Map";
+import ImageCarousel from "../components/ImageCarousel";
 
 export default function RestaurantScreen({ navigation }) {
   const id = navigation.getParam("id");
@@ -19,7 +21,14 @@ export default function RestaurantScreen({ navigation }) {
     searchRestaurant(id);
   }, []);
 
-  if (loading) return <ActivityIndicator size="large" color="#99CC00" />;
+  if (loading)
+    return (
+      <ActivityIndicator
+        size="large"
+        color="#99CC00"
+        style={{ marginTop: 40 }}
+      />
+    );
   if (error) {
     return (
       <View style={styles.container}>
@@ -29,29 +38,28 @@ export default function RestaurantScreen({ navigation }) {
   }
 
   // console.log(data, loading, error);
-  const dimensions = Dimensions.get("window");
-  const imgWidth = dimensions.width;
 
+  // <FlatList
+  //       data={data.photos}
+  //       keyExtractor={(item) => item}
+  //       renderItem={({ item }) => (
+  //         <Image
+  //           source={{ uri: item }}
+  //           style={{ height: 200, width: imgWidth }}
+  //         />
+  //       )}
+  //     />
   return (
     <View>
-      <FlatList
-        data={data.photos}
-        keyExtractor={(item) => item}
-        renderItem={({ item }) => (
-          <Image
-            source={{ uri: item }}
-            style={{ height: 200, width: imgWidth }}
-          />
-        )}
+      <Text style={styles.header} numberOfLines={1}>
+        {data.name}
+      </Text>
+      <ImageCarousel images={data.photos} />
+      <Map
+        coordinates={data.coordinates}
+        title={data.name}
+        description={data.location.address1}
       />
-      {/* <MapView
-        initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-      /> */}
     </View>
   );
 }
@@ -63,12 +71,11 @@ const styles = StyleSheet.create({
     // flex: 1,
   },
   header: {
-    marginVertical: 10,
     fontWeight: "bold",
     fontSize: 22,
+    paddingHorizontal: 25,
+    paddingVertical: 10,
+    backgroundColor: "black",
+    color: "white",
   },
-  // image: {
-  //   height: 200,
-  //   width: imgWidth,
-  // },
 });

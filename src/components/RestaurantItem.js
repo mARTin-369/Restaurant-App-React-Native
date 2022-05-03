@@ -22,7 +22,7 @@ function RestaurantItem({ restaurant, navigation }) {
               style={styles.star}
             />
             <Text style={styles.rating}>{restaurant.rating.toFixed(1)}</Text>
-            <Text style={styles.money}>{restaurant.price}</Text>
+            <Text style={styles.money}>${restaurant.price}</Text>
           </View>
         </View>
       </View>
