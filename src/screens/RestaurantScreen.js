@@ -6,12 +6,17 @@ import {
   View,
   ActivityIndicator,
   Dimensions,
+  ScrollView,
+  TouchableOpacity,
 } from "react-native";
 
 import { useEffect } from "react";
 import useRestaurant from "../hooks/useRestaurant";
 import Map from "../components/Map";
 import ImageCarousel from "../components/ImageCarousel";
+import { convertTime, formatTime } from "../common/helper";
+import Schedule from "../components/Schedule";
+import { elevation } from "../common/styles";
 
 export default function RestaurantScreen({ navigation }) {
   const id = navigation.getParam("id");
@@ -39,37 +44,43 @@ export default function RestaurantScreen({ navigation }) {
 
   // console.log(data, loading, error);
 
-  // <FlatList
-  //       data={data.photos}
-  //       keyExtractor={(item) => item}
-  //       renderItem={({ item }) => (
-  //         <Image
-  //           source={{ uri: item }}
-  //           style={{ height: 200, width: imgWidth }}
-  //         />
-  //       )}
-  //     />
+  let openHours = data.hours[0].open;
+  openHours = openHours.map((time) => formatTime(time));
+  // console.log(openHours);
   return (
-    <View>
+    <View style={styles.container}>
       <Text style={styles.header} numberOfLines={1}>
         {data.name}
       </Text>
-      <ImageCarousel images={data.photos} />
-      <Map
-        coordinates={data.coordinates}
-        title={data.name}
-        description={data.location.address1}
-      />
+      <ScrollView>
+        <ImageCarousel images={data.photos} />
+        <Map
+          coordinates={data.coordinates}
+          title={data.name}
+          description={data.location.address1}
+        />
+        <Schedule openHours={openHours} />
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Restaurant", { id: restaurant.id });
+          }}
+        >
+          <View style={[styles.btn, styles.elevation]}>
+            <Text style={styles.btnTxt}>Add To Go</Text>
+          </View>
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 25,
-    // marginVertical: 10,
-    // flex: 1,
+    flex: 1,
+    // backgroundColor: "#00f9ff",
+    // height: "100%",
   },
+  elevation,
   header: {
     fontWeight: "bold",
     fontSize: 22,
@@ -77,5 +88,14 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     backgroundColor: "black",
     color: "white",
+  },
+  btn: {
+    backgroundColor: "#99CC00",
+    alignSelf: "center",
+    padding: 12,
+    // borderRadius: ""
+  },
+  btnTxt: {
+    fontSize: 20,
   },
 });

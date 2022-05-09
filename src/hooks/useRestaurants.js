@@ -20,7 +20,7 @@ export default () => {
         params: {
           limit: 25,
           term,
-          location: "Toronto",
+          // location: "Toronto",
         },
       });
 
