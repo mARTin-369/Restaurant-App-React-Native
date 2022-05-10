@@ -1,5 +1,6 @@
 import { useState } from "react";
 import yelp from "../api/yelp";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default () => {
   const [result, setResult] = useState({
@@ -9,6 +10,12 @@ export default () => {
   });
 
   const searchRestaurant = async (id) => {
+    const cacheIntervalInHours = 48;
+    const cacheExpiryTime = new Date();
+    cacheExpiryTime.setHours(cacheExpiryTime.getHours() + cacheIntervalInHours);
+    let lastRequest = await AsyncStorage.getItem("lastRequest");
+    lastRequest = new Date(lastRequest);
+
     setResult({
       data: null,
       loading: true,
@@ -16,13 +23,30 @@ export default () => {
     });
 
     try {
-      const response = await yelp.get(`/${id}`, {});
+      let cachedData = await AsyncStorage.getItem(id);
 
-      setResult({
-        data: response.data,
-        loading: false,
-        error: null,
-      });
+      if (
+        cachedData == null ||
+        lastRequest == null ||
+        lastRequest > cacheExpiryTime
+      ) {
+        const response = await yelp.get(`/${id}`, {});
+        await AsyncStorage.setItem("lastRequest", new Date().toString());
+        await AsyncStorage.setItem(id, JSON.stringify(response.data));
+
+        setResult({
+          data: response.data,
+          loading: false,
+          error: null,
+        });
+      } else {
+        // console.log("Rendering cached results");
+        setResult({
+          data: JSON.parse(cachedData),
+          loading: false,
+          error: null,
+        });
+      }
     } catch (error) {
       setResult({
         data: null,

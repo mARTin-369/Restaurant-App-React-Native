@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.11",
-    "accordion-collapse-react-native": "^1.1.0",
     "axios": "^0.26.0",
     "expo": "~44.0.0",
     "expo-status-bar": "~1.2.0",
@@ -27,7 +26,8 @@
     "react-native-snap-carousel": "^3.9.1",
     "react-native-web": "0.17.1",
     "react-navigation": "^4.4.4",
-    "react-navigation-stack": "^2.10.4"
+    "react-navigation-stack": "^2.10.4",
+    "@react-native-async-storage/async-storage": "~1.15.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

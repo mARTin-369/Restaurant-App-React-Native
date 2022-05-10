@@ -7,7 +7,7 @@ import Restaurants from "../components/Restaurants";
 import Search from "../components/Search";
 
 export default function HomeScreen() {
-  const [term, setTerm] = useState("");
+  const [term, setTerm] = useState("indian");
   const categories = [
     {
       name: "Burger",
