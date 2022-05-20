@@ -8,18 +8,16 @@ const OpenHours = ({ openHours }) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <MaterialIcons name="schedule" size={32} color="black" />
-        <Text style={styles.title}>Hours</Text>
-      </View>
-
-      <View style={[styles.scheduleContainer, elevation]}>
-        {openHours.map((item) => (
-          <View style={styles.openHours} key={item.day}>
-            <Text>{item.day}</Text>
-            <View>
-              <Text style={styles.time}>{`${item.start} - ${item.end}`}</Text>
+        <View style={[styles.scheduleContainer, elevation]}>
+          {openHours.map((item) => (
+            <View style={styles.openHours} key={item.day}>
+              <Text>{item.day}</Text>
+              <View>
+                <Text style={styles.time}>{`${item.start} - ${item.end}`}</Text>
+              </View>
             </View>
-          </View>
-        ))}
+          ))}
+        </View>
       </View>
     </View>
   );
@@ -29,7 +27,8 @@ export default OpenHours;
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 25,
+    backgroundColor: "white",
+    paddingHorizontal: 25,
   },
   header: {
     flexDirection: "row",
@@ -40,21 +39,22 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   scheduleContainer: {
-    borderWidth: 1,
-    borderColor: "#999999",
-    marginBottom: 20,
+    // borderWidth: 1,
+    // borderColor: "#999999",
+    // width: "100%",
+    marginLeft: 10,
+    marginRight: 0,
   },
   openHours: {
     flexDirection: "row",
     justifyContent: "space-between",
-    backgroundColor: "white",
     paddingVertical: 10,
-    paddingHorizontal: 40,
-    paddingLeft: 20,
+    paddingHorizontal: 10,
     borderBottomWidth: 1,
-    borderColor: "#999999",
+    borderColor: "#e8eaed",
   },
   time: {
+    marginLeft: 20,
     color: "black",
   },
 });

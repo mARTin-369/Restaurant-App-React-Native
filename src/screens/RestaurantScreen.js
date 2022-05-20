@@ -17,6 +17,8 @@ import ImageCarousel from "../components/ImageCarousel";
 import { convertTime, formatTime } from "../common/helper";
 import Schedule from "../components/Schedule";
 import { elevation } from "../common/styles";
+import { theme } from "../common/theme";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export default function RestaurantScreen({ navigation }) {
   const id = navigation.getParam("id");
@@ -47,6 +49,10 @@ export default function RestaurantScreen({ navigation }) {
   let openHours = data.hours[0].open;
   openHours = openHours.map((time) => formatTime(time));
   // console.log(openHours);
+
+  const address = data.location.display_address;
+  const phone = data.phone;
+
   return (
     <View style={styles.container}>
       <Text style={styles.header} numberOfLines={1}>
@@ -59,6 +65,20 @@ export default function RestaurantScreen({ navigation }) {
           title={data.name}
           description={data.location.address1}
         />
+        <View style={styles.sectionContainer}>
+          <MaterialIcons name="location-pin" size={32} color="black" />
+          <View style={styles.sectionText}>
+            {address.map((item, index) => (
+              <Text key={index}>{item}</Text>
+            ))}
+          </View>
+        </View>
+        <View style={styles.sectionContainer}>
+          <MaterialIcons name="phone" size={32} color="black" />
+          <View style={styles.sectionText}>
+            <Text>{phone}</Text>
+          </View>
+        </View>
         <Schedule openHours={openHours} />
         <TouchableOpacity
           onPress={() => {
@@ -77,7 +97,7 @@ export default function RestaurantScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: "#00f9ff",
+    backgroundColor: "#000",
     // height: "100%",
   },
   elevation,
@@ -89,13 +109,27 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     color: "white",
   },
+  sectionContainer: {
+    backgroundColor: "white",
+    flexDirection: "row",
+    paddingVertical: 10,
+    paddingHorizontal: 25,
+    // borderWidth: 1,
+    // borderColor: "black",
+    marginBottom: 1,
+  },
+  sectionText: {
+    marginLeft: 20,
+  },
   btn: {
-    backgroundColor: "#99CC00",
+    backgroundColor: theme.primaryColor,
     alignSelf: "center",
     padding: 12,
-    // borderRadius: ""
+    paddingHorizontal: 20,
+    borderRadius: 50,
+    marginVertical: 25,
   },
   btnTxt: {
-    fontSize: 20,
+    fontSize: 18,
   },
 });
