@@ -8,9 +8,14 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
+  Linking,
 } from "react-native";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { MaterialIcons } from "@expo/vector-icons";
+import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import useRestaurant from "../hooks/useRestaurant";
 import Map from "../components/Map";
 import ImageCarousel from "../components/ImageCarousel";
@@ -18,7 +23,6 @@ import { convertTime, formatTime } from "../common/helper";
 import Schedule from "../components/Schedule";
 import { elevation } from "../common/styles";
 import { theme } from "../common/theme";
-import { MaterialIcons } from "@expo/vector-icons";
 
 export default function RestaurantScreen({ navigation }) {
   const id = navigation.getParam("id");
@@ -58,6 +62,7 @@ export default function RestaurantScreen({ navigation }) {
       <Text style={styles.header} numberOfLines={1}>
         {data.name}
       </Text>
+
       <ScrollView>
         <ImageCarousel images={data.photos} />
         <Map
@@ -65,6 +70,7 @@ export default function RestaurantScreen({ navigation }) {
           title={data.name}
           description={data.location.address1}
         />
+
         <View style={styles.sectionContainer}>
           <MaterialIcons name="location-pin" size={32} color="black" />
           <View style={styles.sectionText}>
@@ -73,23 +79,65 @@ export default function RestaurantScreen({ navigation }) {
             ))}
           </View>
         </View>
+
         <View style={styles.sectionContainer}>
           <MaterialIcons name="phone" size={32} color="black" />
           <View style={styles.sectionText}>
             <Text>{phone}</Text>
           </View>
+          <View style={{ flex: 1, alignItems: "flex-end" }}>
+            <TouchableOpacity
+              onPress={() => {
+                Linking.openURL(`tel:${phone}`);
+              }}
+            >
+              <View style={styles.callBtn}>
+                <MaterialIcons name="phone" size={24} color="white" />
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
+
         <Schedule openHours={openHours} />
+
         <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("Restaurant", { id: restaurant.id });
+          onPress={async () => {
+            let favourites = await AsyncStorage.getItem("favourites");
+            if (favourites == null) {
+              favourites = [];
+            } else {
+              favourites = JSON.parse(favourites);
+            }
+
+            // console.log(favourites);
+
+            if (!favourites.some((item) => item.id == data.id)) {
+              favourites.push({
+                id: data.id,
+                name: data.name,
+                image_url: data.image_url,
+              });
+            }
+
+            await AsyncStorage.setItem(
+              "favourites",
+              JSON.stringify(favourites)
+            );
+
+            Toast.show({
+              type: "success",
+              text1: "Added to Favourites",
+              position: "top",
+              topOffset: 20,
+            });
           }}
         >
           <View style={[styles.btn, styles.elevation]}>
-            <Text style={styles.btnTxt}>Add To Go</Text>
+            <Text style={styles.btnTxt}>Add to Favourites</Text>
           </View>
         </TouchableOpacity>
       </ScrollView>
+      <Toast />
     </View>
   );
 }
@@ -116,10 +164,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     // borderWidth: 1,
     // borderColor: "black",
+    width: "100%",
     marginBottom: 1,
   },
   sectionText: {
     marginLeft: 20,
+  },
+  callBtn: {
+    borderRadius: 50,
+    backgroundColor: "green",
+    padding: 8,
   },
   btn: {
     backgroundColor: theme.primaryColor,
