@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
+  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -18,7 +19,7 @@ export default function Favourites() {
   const getFavourites = async () => {
     try {
       let data = await AsyncStorage.getItem("favourites");
-      console.log(data);
+      // console.log(data);
       data = JSON.parse(data);
       setFavourites(data);
     } catch (err) {
@@ -48,37 +49,38 @@ export default function Favourites() {
     );
   }
 
-  if (favourites == null || favourites.length < 1) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.header}>No favourites added</Text>
-      </View>
-    );
-  }
+  // if (favourites == null || favourites.length < 1) {
+  //   return (
+  //     <View style={styles.container}>
+  //       <Text style={styles.header}>No favourites added</Text>
+  //     </View>
+  //   );
+  // }
 
   return (
-    <View style={styles.container}>
-      {/* {favourites.map((restaurant) => (
-        <FavouriteItem
-          restaurant={restaurant}
-          removefavourite={removefavourite}
-          key={restaurant.id}
-        />
-      ))} */}
-      <FlatList
-        data={favourites}
-        keyExtractor={(restaurant) => restaurant.id}
-        renderItem={({ item }) => (
-          <FavouriteItem restaurant={item} removefavourite={removefavourite} />
-        )}
-      />
-    </View>
+    <ScrollView>
+      <View style={styles.container}>
+        {favourites.map((restaurant) => (
+          <FavouriteItem
+            restaurant={restaurant}
+            removefavourite={removefavourite}
+            key={restaurant.id}
+          />
+        ))}
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    // justifyContent: "center",
+    marginTop: 5,
+    marginBottom: 15,
+    marginHorizontal: 10,
   },
   header: {
     marginTop: 20,

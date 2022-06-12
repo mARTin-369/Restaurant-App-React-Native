@@ -9,8 +9,8 @@ const OpenHours = ({ openHours }) => {
       <View style={styles.header}>
         <MaterialIcons name="schedule" size={32} color="black" />
         <View style={[styles.scheduleContainer, elevation]}>
-          {openHours.map((item) => (
-            <View style={styles.openHours} key={item.day}>
+          {openHours.map((item, index) => (
+            <View style={styles.openHours} key={index}>
               <Text>{item.day}</Text>
               <View>
                 <Text style={styles.time}>{`${item.start} - ${item.end}`}</Text>

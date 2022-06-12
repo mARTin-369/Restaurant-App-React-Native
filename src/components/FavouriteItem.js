@@ -3,19 +3,23 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
   Pressable,
+  Dimensions,
 } from "react-native";
 import { FontAwesome, AntDesign } from "@expo/vector-icons";
 import { elevation } from "../common/styles";
 import { withNavigation } from "react-navigation";
-import Animated from "react-native-reanimated";
+import Animated, { Layout, FadeOut } from "react-native-reanimated";
 
 function FavouriteItem({ restaurant, removefavourite, navigation }) {
+  const screenWidth = Dimensions.get("screen").width;
+  const boxLength = (screenWidth - 40) / 2;
+
   return (
-    <View>
+    <Animated.View exiting={FadeOut} layout={Layout.easing()}>
       <Pressable
         style={({ pressed }) => [
+          { width: boxLength, height: boxLength },
           styles.container,
           styles.elevation,
           { backgroundColor: pressed ? "#99CC00" : "white" },
@@ -25,50 +29,48 @@ function FavouriteItem({ restaurant, removefavourite, navigation }) {
         }}
       >
         <Image source={{ uri: restaurant.image_url }} style={styles.image} />
-        <View style={styles.infoContainer}>
-          <Text style={styles.header}>{restaurant.name}</Text>
-        </View>
+
+        <Text style={styles.header} numberOfLines={1}>
+          {restaurant.name}
+        </Text>
+
         <Pressable
           onPress={() => {
             removefavourite(restaurant.id);
           }}
+          style={styles.closeIcon}
         >
-          <AntDesign name="closecircle" size={28} color="black" />
+          <AntDesign name="closecircle" size={24} color="black" />
         </Pressable>
       </Pressable>
-    </View>
+    </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
   elevation,
   container: {
-    // alignSelf: "stretch",
-    height: 100,
-    marginHorizontal: 25,
-    borderRadius: 50,
-    marginVertical: 10,
-    flexDirection: "row",
+    marginHorizontal: 5,
+    marginVertical: 5,
+    borderRadius: 10,
     alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
   },
   image: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    marginLeft: 10,
-  },
-  infoContainer: {
-    // marginLeft: 10,
-    paddingHorizontal: 10,
-    flex: 1,
+    width: 90,
+    height: 90,
+    borderRadius: 50,
   },
   header: {
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 4,
+    marginTop: 8,
   },
-  info: {
-    flexDirection: "row",
+  closeIcon: {
+    position: "absolute",
+    top: 5,
+    right: 5,
   },
 });
 
