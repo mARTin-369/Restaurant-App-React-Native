@@ -6,7 +6,7 @@ import {
   Pressable,
   Dimensions,
 } from "react-native";
-import { FontAwesome, AntDesign } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { elevation } from "../common/styles";
 import { withNavigation } from "react-navigation";
 import Animated, { Layout, FadeOut } from "react-native-reanimated";
@@ -58,8 +58,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   image: {
-    width: 90,
-    height: 90,
+    width: "65%",
+    height: "65%",
     borderRadius: 50,
   },
   header: {
